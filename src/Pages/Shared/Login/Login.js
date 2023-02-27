@@ -11,10 +11,10 @@ const Login = () => {
   const googleProvider = new GoogleAuthProvider();
   const facebookProvider = new FacebookAuthProvider();
   facebookProvider.addScope('user_birthday');
-  // const location = useLocation();
-  // const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || "/";
 
   const handleGoogleSignIn = () => {
     googleSignIn(googleProvider)
@@ -22,7 +22,7 @@ const Login = () => {
         const user = result.user;
         console.log('User', user);
         // saveUser(user.displayName, user.email);
-        // navigate(from, { replace: true });
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         console.error(error);
@@ -33,6 +33,7 @@ const Login = () => {
     facebookSignIn(facebookProvider)
       .then((result)=> {
         const user = result.user;
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         console.error(error);
@@ -48,7 +49,7 @@ const Login = () => {
     signIn(email, password)
       .then((result) => {
         const user = result.user;
-        // navigate(from, { replace: true });
+        navigate(from, { replace: true });
       })
       .catch((er) => {
         console.log("error:", er);
