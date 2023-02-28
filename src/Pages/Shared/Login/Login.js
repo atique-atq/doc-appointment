@@ -31,7 +31,6 @@ const Login = () => {
         const email = user.email;
         console.log('User', user);
         saveUser(user.displayName, user.email);
-        setCreatedUserEmail(email);
       })
       .catch((error) => {
         console.error(error);
@@ -45,7 +44,6 @@ const Login = () => {
         const email = user.email;
         console.log('---- : ', user);
         saveUser(user.displayName, user.email);
-        setCreatedUserEmail(email);
       })
       .catch((error) => {
         console.error(error);
@@ -72,7 +70,7 @@ const Login = () => {
 
   const saveUser = (name, email) => {
     const user = { name, email };
-    fetch("https://doctor-appointment-server-eight.vercel.app/users", {
+    fetch("https://doctor-appointment-server-atique-atq.vercel.app/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -81,6 +79,7 @@ const Login = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        setCreatedUserEmail(email);
         console.log("user saved! :", data);
       });
   };

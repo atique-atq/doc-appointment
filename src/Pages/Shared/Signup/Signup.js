@@ -50,9 +50,6 @@ const SignUp = () => {
           toast.success("Registration Successful", {
           position: "top-right",
         });
-        toast.success("Registration Successful", {
-          position: "top-right",
-        });
         form.reset();
       })
       .catch((e) => {
@@ -63,7 +60,7 @@ const SignUp = () => {
 
   const saveUser = (name, email) => {
     const user = { name, email };
-    fetch("https://doctor-appointment-server-eight.vercel.app/users", {
+    fetch("https://doctor-appointment-server-atique-atq.vercel.app/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",

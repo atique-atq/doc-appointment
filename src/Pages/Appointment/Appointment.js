@@ -2,8 +2,8 @@ import React from 'react';
 
 const Appointment = () => {
     return (
-        <div>
-            This is appointment place;
+        <div className='flex items-center justify-center text-3xl mt-10'>
+            Appointment Section Coming soon.
         </div>
     );
 };

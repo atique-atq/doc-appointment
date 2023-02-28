@@ -5,7 +5,7 @@ const useToken = email => {
 
     useEffect(() => {
         if (email) {
-            fetch(`https://doctor-appointment-server-eight.vercel.app/jwt?email=${email}`)
+            fetch(`https://doctor-appointment-server-atique-atq.vercel.app/jwt?email=${email}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.accessToken) {
