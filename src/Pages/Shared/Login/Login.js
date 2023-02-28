@@ -1,45 +1,37 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { GoogleAuthProvider, FacebookAuthProvider} from "firebase/auth";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../contexts/AuthProvier/AuthProvider";
 import Loading from "../Loading/Loading";
+import useToken from "../../../hooks/useToken";
 
 const Login = () => {
   const { signIn, googleSignIn, facebookSignIn, loading } = useContext(AuthContext);
   const googleProvider = new GoogleAuthProvider();
   const facebookProvider = new FacebookAuthProvider();
   facebookProvider.addScope('user_birthday');
+
+  const [createdUserEmail, setCreatedUserEmail] = useState('');
+  const [token] = useToken(createdUserEmail);
+
   const location = useLocation();
   const navigate = useNavigate();
-
   const from = location.state?.from?.pathname || "/";
+
+  if(token){
+      navigate(from, { replace: true });
+  }
 
   const handleGoogleSignIn = () => {
     googleSignIn(googleProvider)
       .then((result) => {
         const user = result.user;
+        const email = user.email;
         console.log('User', user);
         saveUser(user.displayName, user.email);
-        // get jwt token
-        fetch('http://localhost:5000/jwt', {
-                method: 'POST',
-                headers: {
-                  'content-type': 'application/json'
-                },
-                body: JSON.stringify(user)
-                })
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    localStorage.setItem('appointment-token', data.token);
-                        navigate(from, { replace: true });
-                        toast.success('Login Successful', {
-                            position: "top-right"
-                        });
-                    });
-        navigate(from, { replace: true });
+        setCreatedUserEmail(email);
       })
       .catch((error) => {
         console.error(error);
@@ -50,7 +42,10 @@ const Login = () => {
     facebookSignIn(facebookProvider)
       .then((result)=> {
         const user = result.user;
-        navigate(from, { replace: true });
+        const email = user.email;
+        console.log('---- : ', user);
+        saveUser(user.displayName, user.email);
+        setCreatedUserEmail(email);
       })
       .catch((error) => {
         console.error(error);
@@ -66,7 +61,7 @@ const Login = () => {
     signIn(email, password)
       .then((result) => {
         const user = result.user;
-        navigate(from, { replace: true });
+        setCreatedUserEmail(email);
       })
       .catch((er) => {
         console.log("error:", er);
@@ -77,7 +72,7 @@ const Login = () => {
 
   const saveUser = (name, email) => {
     const user = { name, email };
-    fetch("http://localhost:5000/users", {
+    fetch("https://doctor-appointment-server-eight.vercel.app/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",
