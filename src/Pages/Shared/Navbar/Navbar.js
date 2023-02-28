@@ -76,7 +76,7 @@ const Navbar = () => {
               {menuItems}
             </ul>
           </div>
-          <Link to='/' className="text-xl font-semibold font-mono text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 to-pink-600">
+          <Link to='/' className="ml-2 md:ml-20 text-xl font-semibold font-mono text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 to-pink-600">
             DocAppointmentBD
           </Link>
         </div>

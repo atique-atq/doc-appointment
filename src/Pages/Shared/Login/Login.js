@@ -21,7 +21,24 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         console.log('User', user);
-        // saveUser(user.displayName, user.email);
+        saveUser(user.displayName, user.email);
+        // get jwt token
+        fetch('http://localhost:5000/jwt', {
+                method: 'POST',
+                headers: {
+                  'content-type': 'application/json'
+                },
+                body: JSON.stringify(user)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    localStorage.setItem('appointment-token', data.token);
+                        navigate(from, { replace: true });
+                        toast.success('Login Successful', {
+                            position: "top-right"
+                        });
+                    });
         navigate(from, { replace: true });
       })
       .catch((error) => {
@@ -59,8 +76,8 @@ const Login = () => {
   };
 
   const saveUser = (name, email) => {
-    const user = { name, email, role: "user" };
-    fetch("https://get-shield-server.vercel.app/users", {
+    const user = { name, email };
+    fetch("http://localhost:5000/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -69,7 +86,7 @@ const Login = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("user saved!");
+        console.log("user saved! :", data);
       });
   };
 

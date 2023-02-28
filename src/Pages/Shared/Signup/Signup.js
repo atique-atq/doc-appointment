@@ -4,13 +4,22 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../contexts/AuthProvier/AuthProvider";
 import Loading from "../Loading/Loading";
+import useToken from "../../../hooks/useToken";
 
 const SignUp = () => {
   const [error, setError] = useState("");
   const { createUser, loading } = useContext(AuthContext);
+  const [createdUserEmail, setCreatedUserEmail] = useState('');
+  const [token] = useToken(createdUserEmail);
   const navigate = useNavigate();
+
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  if(token){
+      console.log('Your Token is: ', token);
+      navigate(from, { replace: true });
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +28,6 @@ const SignUp = () => {
     const email = form.email.value;
     const password = form.password.value.toLowerCase();
     const confirm = form.confirmPassword.value;
-    const role = "user";
 
     if (password.length < 6) {
       setError("Password should be 6 characters or more.");
@@ -39,11 +47,10 @@ const SignUp = () => {
         console.log(user);
         setError("");
         form.reset();
-        // saveUser(name, email, role);
+        saveUser(name, email);
           toast.success("Registration Successful", {
           position: "top-right",
         });
-        navigate(from, { replace: true });
         toast.success("Registration Successful", {
           position: "top-right",
         });
@@ -55,9 +62,9 @@ const SignUp = () => {
       });
   };
 
-  const saveUser = (name, email, role) => {
-    const user = { name, email, role };
-    fetch("https://get-shield-server.vercel.app/users", {
+  const saveUser = (name, email) => {
+    const user = { name, email };
+    fetch("http://localhost:5000/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -66,7 +73,7 @@ const SignUp = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // setCreatedUserEmail(email);
+        setCreatedUserEmail(email);
       });
   };
 
